@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, GraduationCap, BrainCircuit, Rocket, Award, Code2, Terminal, CheckCircle2, Sparkles, BookOpen } from 'lucide-react';
+import { User, GraduationCap, BrainCircuit, Rocket, Code2, CheckCircle2, Sparkles } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 
 export default function AboutSection() {
@@ -254,4 +254,3 @@ export default function AboutSection() {
     </section>
   );
 }
-

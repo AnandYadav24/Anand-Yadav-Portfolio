@@ -1,47 +1,53 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { Sparkles, RefreshCw, Zap, ShieldAlert, Cpu } from 'lucide-react';
+import { Sparkles, Zap, Cpu } from 'lucide-react';
 import { soundFx } from '../utils/audio';
+
+const CORE_COLORS = {
+  cyan: {
+    primary: 0x00f0ff,
+    secondary: 0x38bdf8,
+    accent: 0xa855f7,
+    name: 'Quantum Cyan',
+    glowClass: 'text-cyan-400 border-cyan-500/40 bg-cyan-950/30'
+  },
+  purple: {
+    primary: 0xa855f7,
+    secondary: 0xd946ef,
+    accent: 0x00f0ff,
+    name: 'Hyper Purple',
+    glowClass: 'text-purple-400 border-purple-500/40 bg-purple-950/30'
+  },
+  emerald: {
+    primary: 0x10b981,
+    secondary: 0x34d399,
+    accent: 0x00f0ff,
+    name: 'Neural Matrix',
+    glowClass: 'text-emerald-400 border-emerald-500/40 bg-emerald-950/30'
+  }
+};
 
 export default function Hero3DCore() {
   const mountRef = useRef(null);
   const [coreMode, setCoreMode] = useState('cyan'); // 'cyan' | 'purple' | 'emerald'
   const [rotationSpeed, setRotationSpeed] = useState(1);
-  const [isWireframeOnly, setIsWireframeOnly] = useState(false);
   const [fps, setFps] = useState(60);
 
+  // Keep a ref to rotationSpeed to prevent stale closure in the 3D loop
+  const rotationSpeedRef = useRef(rotationSpeed);
+  useEffect(() => {
+    rotationSpeedRef.current = rotationSpeed;
+  }, [rotationSpeed]);
+
   // References to dynamic Three.js objects for real-time reactivity
-  const sceneRef = useRef(null);
   const coreMeshRef = useRef(null);
   const innerCoreRef = useRef(null);
   const ring1Ref = useRef(null);
   const ring2Ref = useRef(null);
   const ring3Ref = useRef(null);
   const particlesRef = useRef(null);
-
-  const colors = {
-    cyan: {
-      primary: 0x00f0ff,
-      secondary: 0x38bdf8,
-      accent: 0xa855f7,
-      name: 'Quantum Cyan',
-      glowClass: 'text-cyan-400 border-cyan-500/40 bg-cyan-950/30'
-    },
-    purple: {
-      primary: 0xa855f7,
-      secondary: 0xd946ef,
-      accent: 0x00f0ff,
-      name: 'Hyper Purple',
-      glowClass: 'text-purple-400 border-purple-500/40 bg-purple-950/30'
-    },
-    emerald: {
-      primary: 0x10b981,
-      secondary: 0x34d399,
-      accent: 0x00f0ff,
-      name: 'Neural Matrix',
-      glowClass: 'text-emerald-400 border-emerald-500/40 bg-emerald-950/30'
-    }
-  };
+  const light1Ref = useRef(null);
+  const light2Ref = useRef(null);
 
   useEffect(() => {
     const container = mountRef.current;
@@ -49,7 +55,6 @@ export default function Hero3DCore() {
 
     // SCENE SETUP
     const scene = new THREE.Scene();
-    sceneRef.current = scene;
 
     const width = container.clientWidth;
     const height = container.clientHeight;
@@ -71,20 +76,24 @@ export default function Hero3DCore() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    const pointLight1 = new THREE.PointLight(colors[coreMode].primary, 5, 20);
+    const initialColors = CORE_COLORS.cyan;
+
+    const pointLight1 = new THREE.PointLight(initialColors.primary, 5, 20);
     pointLight1.position.set(4, 4, 4);
     scene.add(pointLight1);
+    light1Ref.current = pointLight1;
 
-    const pointLight2 = new THREE.PointLight(colors[coreMode].accent, 4, 20);
+    const pointLight2 = new THREE.PointLight(initialColors.accent, 4, 20);
     pointLight2.position.set(-4, -4, 2);
     scene.add(pointLight2);
+    light2Ref.current = pointLight2;
 
     // 1. CENTRAL HOLOGRAPHIC CORE (Icosahedron Geodesic)
     const coreGeo = new THREE.IcosahedronGeometry(1.6, 2);
     const coreMat = new THREE.MeshStandardMaterial({
-      color: colors[coreMode].primary,
+      color: initialColors.primary,
       wireframe: true,
-      emissive: colors[coreMode].primary,
+      emissive: initialColors.primary,
       emissiveIntensity: 0.45,
       roughness: 0.2,
       metalness: 0.9,
@@ -98,7 +107,7 @@ export default function Hero3DCore() {
     // Inner Glowing Core Sphere
     const innerGeo = new THREE.IcosahedronGeometry(0.9, 3);
     const innerMat = new THREE.MeshBasicMaterial({
-      color: colors[coreMode].secondary,
+      color: initialColors.secondary,
       wireframe: false,
       transparent: true,
       opacity: 0.25
@@ -132,9 +141,9 @@ export default function Hero3DCore() {
       return ring;
     };
 
-    const ring1 = createRing(2.3, 0.025, colors[coreMode].primary, Math.PI / 3, 0);
-    const ring2 = createRing(2.7, 0.02, colors[coreMode].accent, -Math.PI / 4, Math.PI / 6);
-    const ring3 = createRing(3.1, 0.015, colors[coreMode].secondary, Math.PI / 6, -Math.PI / 4);
+    const ring1 = createRing(2.3, 0.025, initialColors.primary, Math.PI / 3, 0);
+    const ring2 = createRing(2.7, 0.02, initialColors.accent, -Math.PI / 4, Math.PI / 6);
+    const ring3 = createRing(3.1, 0.015, initialColors.secondary, Math.PI / 6, -Math.PI / 4);
 
     scene.add(ring1);
     scene.add(ring2);
@@ -158,7 +167,7 @@ export default function Hero3DCore() {
     particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
     const particleMat = new THREE.PointsMaterial({
       size: 0.04,
-      color: colors[coreMode].primary,
+      color: initialColors.primary,
       transparent: true,
       opacity: 0.7,
       blending: THREE.AdditiveBlending
@@ -219,7 +228,7 @@ export default function Hero3DCore() {
       targetX += (mouseX - targetX) * 0.05;
       targetY += (mouseY - targetY) * 0.05;
 
-      const speedFactor = rotationSpeed;
+      const speedFactor = rotationSpeedRef.current;
 
       if (coreMesh) {
         coreMesh.rotation.y += 0.007 * speedFactor;
@@ -287,7 +296,7 @@ export default function Hero3DCore() {
 
   // REACTIVE COLOR UPDATES WHEN MODE CHANGES
   useEffect(() => {
-    const selected = colors[coreMode];
+    const selected = CORE_COLORS[coreMode];
     if (coreMeshRef.current) {
       coreMeshRef.current.material.color.setHex(selected.primary);
       coreMeshRef.current.material.emissive.setHex(selected.primary);
@@ -309,6 +318,12 @@ export default function Hero3DCore() {
     }
     if (particlesRef.current) {
       particlesRef.current.material.color.setHex(selected.primary);
+    }
+    if (light1Ref.current) {
+      light1Ref.current.color.setHex(selected.primary);
+    }
+    if (light2Ref.current) {
+      light2Ref.current.color.setHex(selected.accent);
     }
   }, [coreMode]);
 
@@ -339,10 +354,10 @@ export default function Hero3DCore() {
         <button
           onClick={cycleCoreMode}
           onMouseEnter={() => soundFx.playHover()}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all duration-300 shadow-lg ${colors[coreMode].glowClass} hover:scale-105 active:scale-95`}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg border backdrop-blur-md transition-all duration-300 shadow-lg ${CORE_COLORS[coreMode].glowClass} hover:scale-105 active:scale-95`}
         >
           <Sparkles className="w-3.5 h-3.5 animate-spin-slow" />
-          <span>Core: {colors[coreMode].name}</span>
+          <span>Core: {CORE_COLORS[coreMode].name}</span>
         </button>
 
         {/* Speed Multiplier */}
@@ -370,4 +385,3 @@ export default function Hero3DCore() {
     </div>
   );
 }
-

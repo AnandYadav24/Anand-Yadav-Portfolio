@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUp, Mail, Heart, Terminal, Cpu } from 'lucide-react';
+import { ArrowUp, Mail, Cpu } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import { soundFx } from '../utils/audio';
 
@@ -93,4 +93,3 @@ export default function Footer() {
     </footer>
   );
 }
-

@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { ArrowRight, Code, Terminal, Sparkles, Download, Mail, ExternalLink } from 'lucide-react';
+import { ArrowRight, Terminal, Mail } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import Hero3DCore from './Hero3DCore';
 import { soundFx } from '../utils/audio';
 
-export default function HeroSection() {
-  const roles = [
-    'Software Engineer',
-    'Frontend Developer',
-    'AI & ML Practitioner',
-    'Data Analytics Specialist'
-  ];
+const ROLES = [
+  'Software Engineer',
+  'Frontend Developer',
+  'AI & ML Practitioner',
+  'Data Analytics Specialist'
+];
 
+export default function HeroSection() {
   const [roleIndex, setRoleIndex] = useState(0);
   const [displayText, setDisplayText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const currentRole = roles[roleIndex];
+    const currentRole = ROLES[roleIndex];
     const typingSpeed = isDeleting ? 40 : 80;
 
     const timer = setTimeout(() => {
@@ -30,7 +30,7 @@ export default function HeroSection() {
         setDisplayText(currentRole.substring(0, displayText.length - 1));
         if (displayText.length === 0) {
           setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
+          setRoleIndex((prev) => (prev + 1) % ROLES.length);
         }
       }
     }, typingSpeed);
@@ -202,4 +202,3 @@ export default function HeroSection() {
     </section>
   );
 }
-

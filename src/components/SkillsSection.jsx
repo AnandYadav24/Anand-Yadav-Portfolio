@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Cpu, Code, Database, Sparkles, Filter, Layers, BrainCircuit, Terminal, CheckCircle2 } from 'lucide-react';
+import { Cpu, BrainCircuit } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 
 export default function SkillsSection() {
   const [activeCategory, setActiveCategory] = useState('all');
-  const [hoveredSkill, setHoveredSkill] = useState(null);
 
   const categories = [
     { id: 'all', label: 'All Tech' },
@@ -142,7 +141,7 @@ export default function SkillsSection() {
     : skills.filter((s) => s.category === activeCategory);
 
   // Mouse tilt calculation handler
-  const handleMouseMove = (e, index) => {
+  const handleMouseMove = (e) => {
     const card = e.currentTarget;
     const rect = card.getBoundingClientRect();
     const x = e.clientX - rect.left;
@@ -205,15 +204,12 @@ export default function SkillsSection() {
 
         {/* 3D Interactive Skill Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5 text-left">
-          {filteredSkills.map((skill, idx) => (
+          {filteredSkills.map((skill) => (
             <div
               key={skill.name}
-              onMouseMove={(e) => handleMouseMove(e, idx)}
+              onMouseMove={handleMouseMove}
               onMouseLeave={handleMouseLeave}
-              onMouseEnter={() => {
-                soundFx.playHover();
-                setHoveredSkill(skill.name);
-              }}
+              onMouseEnter={() => soundFx.playHover()}
               className={`relative glass-panel rounded-2xl p-5 border transition-all duration-200 cursor-pointer overflow-hidden group ${skill.border} hover:shadow-[0_10px_30px_rgba(0,240,255,0.15)]`}
               style={{
                 transformStyle: 'preserve-3d',
@@ -295,4 +291,3 @@ export default function SkillsSection() {
     </section>
   );
 }
-

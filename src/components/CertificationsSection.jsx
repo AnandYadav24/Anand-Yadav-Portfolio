@@ -1,5 +1,5 @@
 import React from 'react';
-import { Award, GraduationCap, CheckCircle2, Calendar, Building, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
+import { Award, GraduationCap, CheckCircle2, Calendar, Building, Sparkles, ShieldCheck } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 
 export default function CertificationsSection() {
@@ -157,4 +157,3 @@ export default function CertificationsSection() {
     </section>
   );
 }
-

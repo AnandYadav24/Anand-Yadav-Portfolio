@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Volume2, VolumeX, Menu, X, Terminal, FileDown, ExternalLink } from 'lucide-react';
+import { Volume2, VolumeX, Menu, X, Terminal } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 
 export default function Navbar() {
@@ -97,12 +97,12 @@ export default function Navbar() {
             )}
           </button>
 
-          {/* Quick Resume Link / Action */}
+          {/* Quick Connect Link / Action */}
           <a
             href="#contact"
             onMouseEnter={() => soundFx.playHover()}
             onClick={() => soundFx.playClick()}
-            className="flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-900 bg-gradient-to-r from-cyan-400 to-cyan-300 hover:from-cyan-300 hover:to-white shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_25px_rgba(0,240,255,0.6)] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+            className="flex items-center gap-2 px-4 py-1.5 rounded-lg text-xs font-mono font-medium text-slate-950 bg-gradient-to-r from-cyan-400 to-cyan-300 hover:from-cyan-300 hover:to-white shadow-[0_0_20px_rgba(0,240,255,0.35)] hover:shadow-[0_0_25px_rgba(0,240,255,0.6)] transition-all transform hover:-translate-y-0.5 active:translate-y-0"
           >
             <Terminal className="w-3.5 h-3.5 text-slate-950" />
             <span>LET'S CONNECT</span>
@@ -163,4 +163,3 @@ export default function Navbar() {
     </header>
   );
 }
-

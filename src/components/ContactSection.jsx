@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, Send, Copy, Check, Terminal, MapPin, Sparkles, MessageSquare } from 'lucide-react';
+import { Mail, Send, Copy, Check, Terminal, MapPin, Sparkles } from 'lucide-react';
 import { LinkedinIcon, GithubIcon } from './Icons';
 import confetti from 'canvas-confetti';
 import { soundFx } from '../utils/audio';
@@ -326,4 +326,3 @@ export default function ContactSection() {
     </section>
   );
 }
-

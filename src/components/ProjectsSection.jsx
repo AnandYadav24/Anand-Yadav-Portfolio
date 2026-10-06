@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FolderGit2, ExternalLink, Sparkles, ArrowUpRight, Cpu, Eye, Filter } from 'lucide-react';
+import { FolderGit2, ArrowUpRight, Eye } from 'lucide-react';
 import { GithubIcon } from './Icons';
 import ProjectModal from './ProjectModal';
 import { soundFx } from '../utils/audio';
@@ -300,4 +300,3 @@ export default function ProjectsSection() {
     </section>
   );
 }
-
